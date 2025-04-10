@@ -1,0 +1,410 @@
+/**
+ * 智能人际关系管理系统样式表 - 苹果风格
+ */
+
+/* 全局样式 */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+  color: #1d1d1f;
+  background-color: #f5f5f7;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 页面内容区 */
+.container-fluid {
+  flex: 1;
+  padding: 0 20px;
+}
+
+/* 导航栏 */
+.navbar {
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+.navbar-brand {
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: #000 !important;
+}
+
+.nav-link {
+  font-weight: 400;
+  color: #1d1d1f !important;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.nav-link:hover {
+  opacity: 1;
+}
+
+.nav-link.active {
+  font-weight: 500;
+  opacity: 1;
+}
+
+.user-avatar {
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* 卡片样式 */
+.card {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 16px 20px;
+  font-weight: 500;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+/* 操作卡片 */
+.action-card {
+  text-align: center;
+  cursor: pointer;
+  padding: 24px 16px;
+}
+
+.action-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #0066cc;
+}
+
+/* 列表样式 */
+.list-group-item {
+  border-left: none;
+  border-right: none;
+  padding: 16px 20px;
+  border-color: rgba(0, 0, 0, 0.05);
+}
+
+.list-group-item:first-child {
+  border-top: none;
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+.list-group-item-action:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* 表单样式 */
+.form-control {
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 10px 16px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus {
+  border-color: #0066cc;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
+}
+
+.form-select {
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 10px 16px;
+  font-size: 16px;
+  background-position: right 16px center;
+}
+
+.input-group-text {
+  background-color: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+/* 按钮样式 */
+.btn {
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: #0066cc;
+  border-color: #0066cc;
+}
+
+.btn-primary:hover {
+  background-color: #0055b3;
+  border-color: #0055b3;
+}
+
+.btn-outline-primary {
+  color: #0066cc;
+  border-color: #0066cc;
+}
+
+.btn-outline-primary:hover {
+  background-color: #0066cc;
+  border-color: #0066cc;
+}
+
+/* 联系人卡片 */
+.contact-card {
+  transition: all 0.3s ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+.contact-avatar {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 互动记录样式 */
+.interaction-item {
+  border-left: 3px solid #0066cc;
+  padding-left: 1rem;
+  margin-bottom: 1rem;
+  background-color: rgba(0, 102, 204, 0.03);
+  border-radius: 0 8px 8px 0;
+  padding: 16px;
+}
+
+.interaction-date {
+  color: #86868b;
+  font-size: 0.875rem;
+}
+
+/* 提醒样式 */
+.reminder-item {
+  border-left: 3px solid #ff9500;
+  padding-left: 1rem;
+  margin-bottom: 1rem;
+  background-color: rgba(255, 149, 0, 0.03);
+  border-radius: 0 8px 8px 0;
+  padding: 16px;
+}
+
+.reminder-date {
+  color: #86868b;
+  font-size: 0.875rem;
+}
+
+/* 承诺样式 */
+.promise-item {
+  border-left: 3px solid #34c759;
+  padding-left: 1rem;
+  margin-bottom: 1rem;
+  background-color: rgba(52, 199, 89, 0.03);
+  border-radius: 0 8px 8px 0;
+  padding: 16px;
+}
+
+.promise-date {
+  color: #86868b;
+  font-size: 0.875rem;
+}
+
+/* 关系网络图 */
+.network-container {
+  width: 100%;
+  height: 600px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+/* 数据分析图表 */
+.chart-container {
+  width: 100%;
+  height: 400px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+/* 标签样式 */
+.badge {
+  font-weight: 500;
+  padding: 0.35em 0.65em;
+  border-radius: 6px;
+  letter-spacing: -0.2px;
+}
+
+/* 加载动画 */
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.spinner-border {
+  color: #0066cc;
+}
+
+/* 页脚 */
+footer {
+  margin-top: auto;
+  padding: 1.5rem 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .action-icon {
+    font-size: 2rem;
+  }
+  
+  .card-title {
+    font-size: 1.1rem;
+  }
+  
+  .network-container,
+  .chart-container {
+    height: 300px;
+  }
+}
+
+/* 登录和注册页面 */
+.auth-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.auth-logo {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-logo i {
+  font-size: 3rem;
+  color: #0066cc;
+}
+
+.auth-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* 动画效果 */
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.slide-up {
+  animation: slideUp 0.5s ease-in-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* 下拉菜单样式 */
+.dropdown-menu {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  padding: 8px 0;
+  margin-top: 10px;
+}
+
+.dropdown-item {
+  padding: 8px 16px;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-divider {
+  margin: 8px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* 模态框样式 */
+.modal-content {
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.modal-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 16px 24px;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 16px 24px;
+}

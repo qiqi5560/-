@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>互动记录 - 智能人际关系管理系统</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- 导航栏 -->
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <i class="bi bi-people-fill me-2"></i>人际关系管理
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/"><i class="bi bi-house-door me-1"></i>首页</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contacts"><i class="bi bi-person-lines-fill me-1"></i>联系人</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/interactions"><i class="bi bi-chat-dots me-1"></i>互动记录</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/reminders"><i class="bi bi-bell me-1"></i>提醒</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/network"><i class="bi bi-diagram-3 me-1"></i>关系网络</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/analytics"><i class="bi bi-graph-up me-1"></i>数据分析</a>
+          </li>
+        </ul>
+        <div class="d-flex">
+          <div class="input-group">
+            <input type="text" id="search-input" class="form-control" placeholder="搜索...">
+            <button class="btn btn-light" type="button" id="search-button">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+          <div class="dropdown ms-2">
+            <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown">
+              <i class="bi bi-person-circle"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="/profile"><i class="bi bi-person me-2"></i>个人资料</a></li>
+              <li><a class="dropdown-item" href="/settings"><i class="bi bi-gear me-2"></i>设置</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#" id="logout-button"><i class="bi bi-box-arrow-right me-2"></i>退出登录</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <div class="container-fluid py-4">
+    <div class="row mb-4">
+      <div class="col-md-8">
+        <h2 class="mb-3">互动记录</h2>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <button class="btn btn-primary" id="new-interaction-btn">
+          <i class="bi bi-plus-circle me-1"></i>新建互动记录
+        </button>
+      </div>
+    </div>
+
+    <!-- 筛选器 -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <i class="bi bi-funnel me-1"></i>筛选
+      </div>
+      <div class="card-body">
+        <form id="filter-form" class="row g-3">
+          <div class="col-md-3">
+            <label for="contact-filter" class="form-label">联系人</label>
+            <select class="form-select" id="contact-filter">
+              <option value="">全部联系人</option>
+              <!-- 联系人选项将通过JavaScript动态加载 -->
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="type-filter" class="form-label">互动类型</label>
+            <select class="form-select" id="type-filter">
+              <option value="">全部类型</option>
+              <option value="call">通话</option>
+              <option value="meeting">见面</option>
+              <option value="message">消息</option>
+              <option value="email">邮件</option>
+              <option value="gift">礼物</option>
+              <option value="activity">活动</option>
+              <option value="other">其他</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="start-date" class="form-label">开始日期</label>
+            <input type="date" class="form-control" id="start-date">
+          </div>
+          <div class="col-md-3">
+            <label for="end-date" class="form-label">结束日期</label>
+            <input type="date" class="form-control" id="end-date">
+          </div>
+          <div class="col-12 text-end">
+            <button type="button" class="btn btn-outline-secondary me-2" id="reset-filter-btn">重置</button>
+            <button type="submit" class="btn btn-primary" id="apply-filter-btn">应用筛选</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- 互动记录列表 -->
+    <div class="card">
+      <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-list-ul me-1"></i>互动记录列表</span>
+        <div class="btn-group btn-group-sm">
+          <button type="button" class="btn btn-outline-secondary" id="list-view-btn" title="列表视图">
+            <i class="bi bi-list"></i>
+          </button>
+          <button type="button" class="btn btn-outline-secondary" id="calendar-view-btn" title="日历视图">
+            <i class="bi bi-calendar3"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body p-0">
+        <!-- 列表视图 -->
+        <div id="list-view">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>联系人</th>
+                  <th>互动类型</th>
+                  <th>标题</th>
+                  <th>日期</th>
+                  <th>情绪</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="interactions-table-body">
+                <!-- 互动记录将通过JavaScript动态加载 -->
+                <tr>
+                  <td colspan="6" class="text-center py-4">加载中...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- 分页 -->
+          <div class="d-flex justify-content-between align-items-center p-3 border-top">
+            <div>
+              <span id="total-count">0</span> 条记录
+            </div>
+            <nav aria-label="互动记录分页">
+              <ul class="pagination pagination-sm mb-0" id="pagination">
+                <!-- 分页将通过JavaScript动态加载 -->
+              </ul>
+            </nav>
+          </div>
+        </div>
+        
+        <!-- 日历视图 -->
+        <div id="calendar-view" class="d-none">
+          <div id="interaction-calendar" class="p-3">
+            <!-- 日历将通过JavaScript动态加载 -->
+            <p class="text-center py-4">日历视图开发中...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 新建/编辑互动记录模态框 -->
+  <div class="modal fade" id="interaction-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="interaction-modal-title">新建互动记录</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+        </div>
+        <div class="modal-body">
+          <form id="interaction-form">
+            <input type="hidden" id="interaction-id">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="interaction-contact" class="form-label">联系人 <span class="text-danger">*</span></label>
+                <select class="form-select" id="interaction-contact" required>
+                  <option value="">选择联系人</option>
+                  <!-- 联系人选项将通过JavaScript动态加载 -->
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="interaction-type" class="form-label">互动类型 <span class="text-danger">*</span></label>
+                <select class="form-select" id="interaction-type" required>
+                  <option value="call">通话</option>
+                  <option value="meeting">见面</option>
+                  <option value="message">消息</option>
+                  <option value="email">邮件</option>
+                  <option value="gift">礼物</option>
+                  <option value="activity">活动</option>
+                  <option value="other">其他</option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="interaction-title" class="form-label">标题 <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="interaction-title" required>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="interaction-date" class="form-label">日期时间 <span class="text-danger">*</span></label>
+                <input type="datetime-local" class="form-control" id="interaction-date" required>
+              </div>
+              <div class="col-md-6">
+                <label for="interaction-location" class="form-label">地点</label>
+                <input type="text" class="form-control" id="interaction-location">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="interaction-mood" class="form-label">情绪</label>
+                <select class="form-select" id="interaction-mood">
+                  <option value="very_positive">非常积极</option>
+                  <option value="positive">积极</option>
+                  <option value="neutral" selected>中性</option>
+                  <option value="negative">消极</option>
+                  <option value="very_negative">非常消极</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="interaction-duration" class="form-label">持续时间（分钟）</label>
+                <input type="number" class="form-control" id="interaction-duration" min="1">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="interaction-content" class="form-label">内容详情</label>
+              <textarea class="form-control" id="interaction-content" rows="4"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="interaction-topics" class="form-label">谈话主题（多个主题用逗号分隔）</label>
+              <input type="text" class="form-control" id="interaction-topics" placeholder="例如：工作,家庭,爱好">
+            </div>
+            <div class="mb-3">
+              <label for="interaction-key-points" class="form-label">关键点</label>
+              <textarea class="form-control" id="interaction-key-points" rows="3" placeholder="记录重要的谈话内容"></textarea>
+            </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" id="interaction-follow-up">
+              <label class="form-check-label" for="interaction-follow-up">需要后续跟进</label>
+            </div>
+            <div id="follow-up-fields" class="d-none">
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="interaction-follow-up-date" class="form-label">计划跟进日期</label>
+                  <input type="date" class="form-control" id="interaction-follow-up-date">
+                </div>
+                <div class="col-md-6">
+                  <label for="interaction-follow-up-notes" class="form-label">跟进备注</label>
+                  <textarea class="form-control" id="interaction-follow-up-notes" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" id="interaction-private">
+              <label class="form-check-label" for="interaction-private">设为私密记录</label>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" id="save-interaction-btn">保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 删除确认模态框 -->
+  <div class="modal fade" id="delete-confirm-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">确认删除</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+        </div>
+        <div class="modal-body">
+          <p>确定要删除这条互动记录吗？此操作无法撤销。</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-danger" id="confirm-delete-btn">删除</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 查看互动详情模态框 -->
+  <div class="modal fade" id="view-interaction-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="view-interaction-title">互动详情</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+        </div>
+        <div class="modal-body" id="view-interaction-body">
+          <!-- 互动详情将通过JavaScript动态加载 -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" id="edit-interaction-btn">编辑</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="bg-light py-3 mt-5">
+    <div class="container text-center">
+      <p class="text-muted mb-0">© 2023 智能人际关系管理系统 | 版权所有</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript 库 -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/interactions.js"></script>
+  <script>
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 检查用户是否已登录
+      if (!await checkAuth()) {
+        window.location.href = '/login.html';
+        return;
+      }
+
+      // 初始化变量
+      let currentPage = 1;
+      let totalPages = 1;
+      let currentInteractionId = null;
+      let contacts = [];
+      const interactionsTableBody = document.getElementById('interactions-table-body');
+      const pagination = document.getElementById('pagination');
+      const totalCount = document.getElementById('total-count');
+      const filterForm = document.getElementById('filter-form');
+      const resetFilterBtn = document.getElementById('reset-filter-btn');
+      const newInteractionBtn = document.getElementById('new-interaction-btn');
+      const interactionModal = new bootstrap.Modal(document.getElementById('interaction-modal'));
+      const viewInteractionModal = new bootstrap.Modal(document.getElementById('view-interaction-modal'));
+      const deleteConfirmModal = new bootstrap.Modal(document.getElementById('delete-confirm-modal'));
+      const saveInteractionBtn = document.getElementById('save-interaction-btn');
+      const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+      const editInteractionBtn = document.getElementById('edit-interaction-btn');
+      const interactionFollowUp = document.getElementById('interaction-follow-up');
+      const followUpFields = document.getElementById('follow-up-fields');
+      const listViewBtn = document.getElementById('list-view-btn');
+      const calendarViewBtn = document.getElementById('calendar-view-btn');
+      const listView = document.getElementById('list-view');
+      const calendarView = document.getElementById('calendar-view');
+
+      // 加载联系人列表
+      async function loadContacts() {
+        try {
+          const response = await API.contacts.getAll();
+          contacts = response.contacts;
+          
+          // 填充联系人筛选下拉框
+          const contactFilter = document.getElementById('contact-filter');
+          contactFilter.innerHTML = '<option value="">全部联系人</option>';
+          
+          // 填充互动记录表单的联系人下拉框
+          const interactionContact = document.getElementById('interaction-contact');
+          interactionContact.innerHTML = '<option value="">选择联系人</option>';
+          
+          contacts.forEach(contact => {
+            const filterOption = document.createElement('option');
+            filterOption.value = contact.id;
+            filterOption.textContent = contact.name;
+            contactFilter.appendChild(filterOption);
+            
+            const formOption = document.createElement('option');
+            formOption.value = contact.id;
+            formOption.textContent = contact.name;
+            interactionContact.appendChild(formOption);
+          });
+        } catch (error) {
+          console.error('加载联系人失败:', error);
+          showToast('加载联系人失败，请刷新页面重试', 'danger');
+        }
+      }
+
+      // 加载互动记录列表
+      async function loadInteractions(page = 1, filters = {}) {
+        try {
+          interactionsTableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4">加载中...</td></tr>';
+          
+          const params = {
+            page,
+            limit: 10,
+            ...filters
+          };
+          
+          const response = await API.interactions.getAll(params);
+          const { interactions, count, pages } = response;
+          
+          currentPage = parseInt(page);
+          totalPages = parseInt(pages);
+          
+          // 更新总数显示
+          totalCount.textContent = count;
+          
+          // 渲染互动记录列表
+          if (interactions.length === 0) {
+            interactionsTableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4">暂无互动记录</td></tr>';
+          } else {
+            interactionsTableBody.innerHTML = interactions.map(interaction => {
+              // 格式化日期
+              const date = new Date(interaction.date);
+              const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+              
+              // 获取情绪对应的标签样式
+              let moodBadge = '';
+              switch (interaction.mood) {
+                case 'very_positive':
+                  moodBadge = '<span class="badge bg-success">非常积极</span>';
+                  break;
+                case 'positive':
+                  moodBadge = '<span class="badge bg-info">积极</span>';
+                  break;
+                case 'neutral':
+                  moodBadge = '<span class="badge bg-secondary">中性</span>';
+                  break;
+                case 'negative':
+                  moodBadge = '<span class="badge bg-warning">消极</span>';
+                  break;
+                case 'very_negative':
+                  moodBadge = '<span class="badge bg-danger">非常消极</span>';
+                  break;
+                default:
+                  moodBadge = '<span class="badge bg-secondary">中性</span>';
+              }
+              
+              // 获取互动类型对应的图标和文本
+              let typeIcon = '';
+              let typeText = '';
+              switch (interaction.type) {
+                case 'call':
+                  typeIcon = '<i class="bi bi-telephone me-1"></i>';
+                  typeText = '通话';
+                  break;
+                case 'meeting':
+                  typeIcon = '<i class="bi bi-people me-1"></i>';
+                  typeText = '见面';
+                  break;
+                case 'message':
+                  typeIcon = '<i class="bi bi-chat me-1"></i>';
+                  typeText = '消息';
+                  break;
+                case 'email':
+                  typeIcon = '<i class="bi bi-envelope me-1"></i>';
+                  typeText = '邮件';
+                  break;
+                case 'gift':
+                  typeIcon = '<i class="bi bi-gift me-1"></i>';
+                  typeText = '礼物';
+                  break;
+                case 'activity':
+                  typeIcon = '<i class="bi bi-calendar-event me-1"></i>';
+                  typeText = '活动';
+                  break;
+                default:
+                  typeIcon = '<i class="bi bi-three-dots me-1"></i>';
+                  typeText = '其他';
+              }
+              
+              return `
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img src="${interaction.Contact.avatar || '/img/default-avatar.png'}" alt="${interaction.Contact.name}" class="rounded-circle me-2" width="32" height="32">
+                      <span>${interaction.Contact.name}</span>
+                    </div>
+                  </td>
+                  <td>${typeIcon}${typeText}</td>
+                  <td>${interaction.title}</td>
+                  <td>${formattedDate}</td>
+                  <td>${moodBadge}</td>
+                  <td>
+                    <div class="btn-group btn-group-sm">
+                      <button type="button" class="btn btn-outline-primary view-interaction" data-id="${interaction.id}" title="查看">
+                        <i class="bi bi-eye"></i>
+                      </button>
+                      <button type="button" class="btn btn-outline-secondary edit-interaction" data-id="${interaction.id}" title="编辑">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                      <button type="button" class="btn btn-outline-danger delete-interaction" data-id="${interaction.id}" title="删除">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }).join('');
+          }
+          
+          // 渲染分页
+          renderPagination();
+          
+          // 添加事件监听器
+          addEventListeners();
+        } catch (error) {
+          console.error('加载互动记录失败:', error);
+          interactionsTableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-danger">加载失败，请刷新页面重试</td></tr>';
+        }
+      }
+
+      // 渲染分页
+      function renderPagination() {
+        pagination.innerHTML = '';
+        
+        // 如果只有一页，不显示分页
+        if (totalPages <= 1) {
+          return;
+        }
+        
+        // 上一页按钮
+        const prevLi = document.createElement('li');
+        prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+        prevLi.innerHTML = `<a class="page-link" href="#" data-page="${currentPage - 1}" aria-label="上一页"><span aria-hidden="true">&laquo;</span></a>`;
+        pagination.appendChild(prevLi);
+        
+        // 页码按钮
+        const maxVisiblePages = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+        
+        if (endPage - startPage + 1 < maxVisiblePages) {
+          startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+        
+        for (let i = startPage; i <= endPage; i++) {
+          const pageLi = document.createElement('li');
+          pageLi.className = `page-item ${i === currentPage ? 'active' : ''}`;
+          pageLi.innerHTML = `<a class="page-link" href="#" data-page="${i}">${i}</a>`;
+          pagination.appendChild(pageLi);
+        }
+        
+        // 下一页按钮
+        const nextLi = document.createElement('li');
+        nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+        nextLi.innerHTML = `<a class="page-link" href="#" data-page="${currentPage + 1}" aria-label="下一页"><span aria-hidden="true">&raquo;</span></a>`;
+        pagination.appendChild(nextLi);
+      }
+
+      // 添加事件监听器
+      function addEventListeners() {
+        // 分页点击事件
+        document.querySelectorAll('#pagination .page-link').forEach(link => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const page = parseInt(e.target.closest('.page-link').dataset.page);
+            if (page && page !== currentPage) {
+              const filters = getFilters();
+              loadInteractions(page, filters);
+            }
+          });
+        });
+        
+        // 查看互动记录
+        document.querySelectorAll('.view-interaction').forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            const id = e.target.closest('.view-interaction').dataset.id;
